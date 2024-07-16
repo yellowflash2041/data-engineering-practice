@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def get_first_uri(s3_client, bucket_name, file_key):
+def get_first_uri(s3_client: boto3.client, bucket_name: str, file_key: str):
     """
     Retrieves the first URI from a gzip-compressed file in an S3 bucket.
 
@@ -25,9 +25,9 @@ def get_first_uri(s3_client, bucket_name, file_key):
     """
     try:
         response = s3_client.get_object(Bucket=bucket_name, Key=file_key)
-        gzipped_data = response['Body'].read()
-        decompressed_data = gzip.decompress(gzipped_data).decode('utf-8')
-        first_uri = decompressed_data.split('\n', 1)[0].strip()
+        gzipped_data = response["Body"].read()
+        decompressed_data = gzip.decompress(gzipped_data).decode("utf-8")
+        first_uri = decompressed_data.split("\n", 1)[0].strip()
         return first_uri
     except Exception as e:
         raise e

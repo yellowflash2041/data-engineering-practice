@@ -87,22 +87,41 @@ def create_index(index_name: str, table_name: str, column_names: list[int] | int
 
 
 def main():
+    """
+    Main function to execute the data ingestion and transformation process.
+
+    This function connects to a PostgreSQL database, creates tables, copies data
+    from CSV files into the tables, and creates indexes. It uses the `table_dict`
+    dictionary to get the necessary table information.
+    """
     host = "localhost"
     database = "postgres"
     user = "postgres"
     password = "104729"
 
+    # Connect to the PostgreSQL database
     with psycopg2.connect(
         host=host, database=database, user=user, password=password
     ) as connection:
         with connection.cursor() as cursor:
+            # Iterate over each CSV file in the 'data' directory
             for csv_file in os.listdir("data"):
+                # Remove the '.csv' extension from the CSV file name
                 table_name = csv_file.removesuffix(".csv")
+
+                # Get the table information from the 'table_dict' dictionary
                 table = table_dict[table_name]
 
+                # Drop the table if it exists
                 cursor.execute(drop_table_if_exists(table_name))
+
+                # Create the table
                 cursor.execute(table.create_query)
+
+                # Copy data from the CSV file into the table
                 copy_data_from_csv(csv_file, table_name, cursor)
+
+                # Create an index on the table
                 create_index(f"{table_name}_idx", table_name, table.index_column)
 
 

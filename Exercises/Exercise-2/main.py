@@ -31,16 +31,33 @@ def find_filenames_regex(base_url: str) -> list:
 
 
 def download_and_print_max_temperature(file_urls: list) -> None:
+    """
+    Download the CSV files from the provided URLs, extract the maximum hourly dry bulb temperature,
+    and print the corresponding row from each file.
+
+    Args:
+        file_urls (list): List of URLs pointing to CSV files
+
+    Returns:
+        None
+    """
     for file_url in file_urls:
+        # Download the file from the URL
         response = requests.get(file_url, timeout=60)
+
+        # Read the CSV data into a DataFrame
         csv_data = io.BytesIO(response.content)
         data_frame = pandas.read_csv(csv_data)
 
+        # Extract the hourly dry bulb temperature data
         temperature_data = pandas.to_numeric(
             data_frame["HourlyDryBulbTemperature"], errors="coerce"
         )
 
+        # Find the row with the maximum temperature
         max_temperature_row = data_frame.loc[temperature_data.idxmax()]
+
+        # Print the row with the maximum temperature
         print(max_temperature_row)
 
 
