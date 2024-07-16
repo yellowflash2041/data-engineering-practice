@@ -5,39 +5,51 @@ import io
 url = "https://www.ncei.noaa.gov/data/local-climatological-data/access/2021/"
 
 
-def find_filenames_regex(url: str) -> list:
+def find_filenames_regex(base_url: str) -> list:
+    """
+    Find filenames in base_url that match the pattern '[A-z0-9]{11}.csv'
+    and were modified on '2024-01-19 10:45'.
+    """
     import re
 
-    with requests.get(url, timeout=16) as response:
-        pattern = re.compile(r"([A-z0-9]{11}\.csv)")
+    response = requests.get(base_url, timeout=16)
+    text = response.text
 
-        s = [
-            pattern.search(i)
-            for i in response.text.splitlines()
-            if re.search(r"2022-02-07 14:03\s{2}", i)
-        ]
+    pattern = re.compile(r"([A-z0-9]{11}\.csv)")
+    filenames = pattern.findall(text)
 
-        return [f"{url}{i.group(0)}" for i in s if i]
+    modified_lines = [
+        line for line in text.splitlines() if re.search(r"2024-01-19 10:45\s{2}", line)
+    ]
+    urls = [
+        f"{base_url}{filename}"
+        for filename in filenames
+        if any(filename in line for line in modified_lines)
+    ]
+
+    return urls
 
 
-def download_and_print(url_list: list) -> None:
-    for e in url_list:
-        res = requests.get(e, timeout=60)
+def download_and_print_max_temperature(file_urls: list) -> None:
+    for file_url in file_urls:
+        response = requests.get(file_url, timeout=60)
+        csv_data = io.BytesIO(response.content)
+        data_frame = pandas.read_csv(csv_data)
 
-        df = pandas.read_csv(io.BytesIO(res.content)).assign(
-            HourlyDryBulbTemperature=lambda x: pandas.to_numeric(
-                x.HourlyDryBulbTemperature, errors="coerce"
-            )
+        temperature_data = pandas.to_numeric(
+            data_frame["HourlyDryBulbTemperature"], errors="coerce"
         )
-        print(df.loc[df.HourlyDryBulbTemperature.idxmax()])
+
+        max_temperature_row = data_frame.loc[temperature_data.idxmax()]
+        print(max_temperature_row)
 
 
 def main():
-    # your code here
-    url_list = find_filenames_regex(url)
-
-    download_and_print(url_list)
-    pass
+    """
+    Main function to execute the program.
+    """
+    file_urls = find_filenames_regex(url)
+    download_and_print_max_temperature(file_urls)
 
 
 if __name__ == "__main__":
