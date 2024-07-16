@@ -4,4 +4,5 @@
 .venv
 downloads
 .env
-output.csv
+__pycache__
+*.csv

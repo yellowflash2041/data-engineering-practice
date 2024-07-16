@@ -3,7 +3,6 @@ import zipfile
 import io
 
 from pathlib import Path
-from requests.exceptions import HTTPError
 
 download_uris = [
     "https://divvy-tripdata.s3.amazonaws.com/Divvy_Trips_2018_Q4.zip",
@@ -18,21 +17,28 @@ download_uris = [
 download_directory = Path(__file__).parent / "downloads"
 
 
-def download_and_unzip(uri: str, download_directory: Path):
-    with requests.Session() as s, s.get(uri, stream=True, timeout=60) as response:
-        try:
+def download_and_extract(url: str, directory: Path):
+    """
+    Downloads a file from the given URL and extracts its contents to the specified directory.
+
+    Args:
+        url (str): The URL of the file to download.
+        directory (Path): The directory where the extracted files will be saved.
+    """
+    with requests.Session() as session:
+        with session.get(url, stream=True, timeout=60) as response:
             response.raise_for_status()
-            zipfile.ZipFile(io.BytesIO(response.content)).extractall(download_directory)
-        except HTTPError as h:
-            print(f"Invalid request for {uri}")
-            print(h)
+            zip_content = io.BytesIO(response.content)
+            with zipfile.ZipFile(zip_content) as zip_file:
+                zip_file.extractall(directory)
 
 
 def main():
-    # your code here
-    for uri in download_uris:
-        download_and_unzip(uri, download_directory)
-    pass
+    """
+    Downloads and extracts files from the given URLs to the specified directory.
+    """
+    for url in download_uris:
+        download_and_extract(url, download_directory)
 
 
 if __name__ == "__main__":
