@@ -109,7 +109,7 @@ def extract_data_from_source_file(dataframe):
     return dataframe
 
 
-def write_dataframe_to_csv(dataframe, output_directory, output_filename):
+def write_dataframe_to_csv(dataframe, output_directory: str, output_filename: str):
     """
     Writes a DataFrame to a CSV file in the specified output directory.
 
