@@ -104,11 +104,16 @@ def answer_question3() -> str:
     """
 
 
-def main():
+def main() -> None:
+    """Main entry point for the script."""
     create_table_from_csv(table_cfg)
-    for query in [query_electric_cars_per_city(), query_top_3_most_popular_electric_vehicles(), answer_question3()]:
+    queries = [
+        query_electric_cars_per_city(),
+        query_top_3_most_popular_electric_vehicles(),
+        answer_question3(),
+    ]
+    for query in queries:
         duckdb.sql(query).show()
-    pass
 
 
 if __name__ == "__main__":
