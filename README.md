@@ -1,5 +1,15 @@
 ## Data Engineering Practice Problems
 
+I am a data engineer with experience building datasets for small and medium-sized businesses. Whether you're trying to win work, online scraping, or starting a new AI startup, I can help.
+
+Knows Python data processing, csv, flat-file, parquet, json, etc.
+SQL database table design.
+Python + Postgres, data ingestion and retrieval.
+PySpark
+Data cleaning/dirty data.
+Manage the entire project from start to finish
+Regular communication is important to me, so let’s keep in touch.
+
 One of the main obstacles of Data Engineering is the large
 and varied technical skills that can be required on a 
 day-to-day basis.
