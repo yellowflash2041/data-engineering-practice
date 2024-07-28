@@ -10,10 +10,7 @@ Data cleaning/dirty data.
 Manage the entire project from start to finish
 Regular communication is important to me, so let’s keep in touch.
 
-Class CPayeer located in ./app/Http/Controllers/cpayeer.php does not comply with psr-4 autoloading standard (rule: App\ => ./app). Skipping.
-Class App\Http\Controllers\MinesController located in ./app/Http/Controllers/MinesController1.php does not comply with psr-4 autoloading standard (rule: App\ => ./app). Skipping.
-Class App\Http\Controllers\NewMinesController located in ./app/Http/Controllers/New.php does not comply with psr-4 autoloading standard (rule: App\ => ./app). Skipping.
-Class App\Http\Controllers\NewMinesController located in ./app/Http/Controllers/Old.php does not comply with psr-4 autoloading standard (rule: App\ => ./app). Skipping.
+Class CPayeer located in ./app/Http/Controllers/CPayeer.php does not comply with psr-4 autoloading standard (rule: App\ => ./app). Skipping.
 
 One of the main obstacles of Data Engineering is the large
 and varied technical skills that can be required on a 
